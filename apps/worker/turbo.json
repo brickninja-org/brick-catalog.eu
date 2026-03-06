@@ -1,0 +1,19 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "dev": {
+      "dependsOn": [
+        "build",
+        "@brickcatalog/database#prisma:migrate"
+      ]
+    },
+    "build": {
+      "outputs": [
+        "dist/**"
+      ]
+    }
+  }
+}

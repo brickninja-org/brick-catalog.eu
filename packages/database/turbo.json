@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build",
+        "prisma:generate"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    }
+  }
+}

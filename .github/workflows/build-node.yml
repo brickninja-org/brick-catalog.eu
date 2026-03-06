@@ -1,0 +1,28 @@
+name: Build Node.js
+on:
+  workflow_call:
+
+env:
+  # renovate: datasource=node-version packageName=node
+  NODE_22_VERSION: 22.22.1
+  # renovate: datasource=node-version packageName=node
+  NODE_24_VERSION: 24.14.0
+
+jobs:
+  build:
+    name: 'Node.js ${{ matrix.node }}'
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        node: [ 22, 24 ]
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      with:
+        submodules: true
+    - name: Setup Node.js env
+      uses: ./.github/actions/setup-node-env
+      with:
+        node-version: ${{ env[format('NODE_{0}_VERSION', matrix.node)] }}
+        cache-key: build
+    - name: Run Build
+      run: pnpm run build

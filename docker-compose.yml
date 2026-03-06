@@ -1,0 +1,24 @@
+services:
+  database:
+    image: timescale/timescaledb:2.25.2-pg17@sha256:ec9366355ee5a42282006095a8677a042f7d3b0567a31777d77a6e7c9d6e0fdf
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=brickcatalog
+      - POSTGRES_PASSWORD=brickcatalog
+      - POSTGRES_DB=brickcatalog
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - .docker/database-pg17:/var/lib/postgresql/data
+    ports:
+      - 54326:5432
+
+  database-migration:
+    image: brickcatalog/database-migration
+    build:
+      context: .
+      dockerfile: apps/database-migration/Dockerfile
+    restart: on-failure:3
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgresql://brickcatalog:brickcatalog@database:5432/brickcatalog?schema=public

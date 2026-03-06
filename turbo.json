@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "ui": "stream",
+  "globalPassThroughEnv": [
+    "PNPM_VERIFY_DEPS_BEFORE_RUN",
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "lint": {
+      "env": [
+        "GITHUB_ACTIONS",
+      ]
+    },
+    "prisma:generate": {
+      "cache": false
+    },
+    "prisma:migrate": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "e2e": {},
+    "test": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  }
+}

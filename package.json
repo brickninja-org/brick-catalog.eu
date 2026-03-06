@@ -1,0 +1,45 @@
+{
+  "name": "brick-catalog.eu",
+  "private": true,
+  "scripts": {
+    "build": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run build",
+    "dev:worker": "PNPM_VERIFY_DEPS_BEFORE_RUN=false FORCE_COLOR=1 turbo run dev --filter=worker",
+    "lint": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run lint --continue -- -f gha",
+    "prisma:studio": "PNPM_VERIFY_DEPS_BEFORE_RUN=false pnpm run --filter @brickcatalog/database prisma:studio",
+    "prisma:migrate-dev": "PNPM_VERIFY_DEPS_BEFORE_RUN=false pnpm run --filter @brickcatalog/database prisma:migrate-dev",
+    "e2e": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run e2e",
+    "test": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run test"
+  },
+  "devDependencies": {
+    "@brickninja/standard": "workspace:*",
+    "@eslint/js": "9.39.3",
+    "@types/node": "24.12.0",
+    "eslint": "9.39.3",
+    "eslint-formatter-gha": "2.0.1",
+    "turbo": "2.8.13",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.56.1"
+  },
+  "engines": {
+    "node": "22 || 24",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "pnpm": "10.30.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.2.4",
+      "react-dom": "19.2.4",
+      "@types/react": "19.2.14",
+      "@types/react-dom": "19.2.3"
+    },
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma",
+      "sharp"
+    ]
+  },
+  "packageManager": "pnpm@10.30.3"
+}

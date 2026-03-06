@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@brickninja/standard/tsconfig/base.json",
+  "compilerOptions": {
+    "composite": true,
+
+    "noEmit": true
+  },
+  "include": ["./prisma.config.ts"]
+}

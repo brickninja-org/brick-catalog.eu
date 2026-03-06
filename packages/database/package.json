@@ -1,0 +1,44 @@
+{
+  "name": "@brickcatalog/database",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prisma:generate": "prisma generate --no-hints",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate-dev": "prisma migrate dev --name",
+    "prisma:studio": "prisma studio",
+    "build": "rm -rf ./dist && tsc -b"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/generated/prisma/client.d.ts",
+      "browser": "./dist/generated/prisma/browser.js",
+      "default": "./dist/generated/prisma/client.js"
+    },
+    "./enums": {
+      "types": "./dist/generated/prisma/enums.d.ts",
+      "default": "./dist/generated/prisma/enums.js"
+    },
+    "./models": {
+      "types": "./dist/generated/prisma/models.d.ts",
+      "default": "./dist/generated/prisma/models.js"
+    },
+    "./setup": {
+      "types": "./dist/setup.d.ts",
+      "default": "./dist/setup.js"
+    }
+  },
+  "files": [
+    "dist",
+    "prisma"
+  ],
+  "dependencies": {
+    "@prisma/adapter-pg": "7.4.2",
+    "@prisma/client": "7.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.12.0",
+    "prisma": "7.4.2",
+    "typescript": "5.9.3"
+  }
+}

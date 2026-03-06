@@ -1,0 +1,46 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices", ":pinAllExceptPeerDependencies"],
+  "ignorePresets": ["security:minimumReleaseAgeNpm"],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "docker-compose.database-migration.yml"
+  ],
+  "addLabels": ["dependencies"],
+  "kubernetes": {
+    "managerFilePatterns": ["/kubernetes/.+\\.yaml$/"]
+  },
+  "github-submodules": {
+    "enabled": true
+  },
+  "postUpdateOptions": ["pnpmDedupe"],
+  "packageRules": [
+    {
+      "matchManagers": ["npm", "dockerfile"],
+      "matchPackageNames": ["mcr.microsoft.com/playwright", "@playwright/test"],
+      "groupName": "playwright"
+    }, {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["renovate"],
+      "extends": ["schedule:weekly"]
+    }, {
+      "description": "Don't update major node versions in workflows",
+      "matchFileNames": ["./github/{workflows,actions}/*.{yml,yaml}"],
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["node-version"],
+      "matchPackageNames": ["node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }, {
+      "description": "Don't pin own docker images in base kubernetes manifest",
+      "matchFileNames": ["kubernetes/base/**/*.yaml"],
+      "matchPackageNames": ["ghcr.io/brickninja-org/brick-catalog.eu/**"],
+      "pinDigests": false
+    }, {
+      "description": "Don't pin dependencies in published packages",
+      "matchFileNames": ["packages/{standard,helper}/package.json"],
+      "matchDepTypes": ["dependencies"],
+      "rangeStrategy": "replace"
+    }
+  ]
+}
