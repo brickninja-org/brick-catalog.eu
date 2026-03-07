@@ -1,4 +1,18 @@
 services:
+  worker:
+    image: brickcatalog/worker
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - database
+      - database-migration
+    environment:
+      - DATABASE_URL=postgresql://brickcatalog:brickcatalog@database:5432/brickcatalog?schema=public
+    deploy:
+      replicas: 2
+
   database:
     image: timescale/timescaledb:2.25.2-pg17@sha256:ec9366355ee5a42282006095a8677a042f7d3b0567a31777d77a6e7c9d6e0fdf
     restart: unless-stopped
