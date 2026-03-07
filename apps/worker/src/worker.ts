@@ -1,52 +1,56 @@
 import { db } from "./db";
+import { executeJob } from "./execute-job";
 
 export const worker = {
-  timeout: undefined as (NodeJS.Timeout | undefined),
-  lastJob: new Date(),
+  pollTimeout: undefined as NodeJS.Timeout | undefined,
+  lastPollAt: new Date(),
   shuttingDown: false,
 
   shutdown() {
-    clearTimeout(this.timeout);
+    clearTimeout(this.pollTimeout);
     this.shuttingDown = true;
   },
 
   start() {
     console.log('Waiting for jobs...');
-    this.run();
+    void this.pollAndRunNextJob();
   },
 
-  async run() {
-    this.lastJob = new Date();
+  async pollAndRunNextJob() {
+    this.lastPollAt = new Date();
 
-    const job = await db.job.findFirst({
+    const nextJob = await db.job.findFirst({
       where: {
-        // scheduledAt in the past
+        // only run jobs scheduled for now or earlier
         scheduledAt: { lte: new Date() },
         OR: [
           // queued jobs
           { state: 'Queued' },
 
-          // finished cron job
+          // completed cron jobs waiting to be rescheduled
           { state: { in: ['Failed', 'Completed'] }, cron: { not: null }},
         ],
       },
       orderBy: [{ priority: 'desc' }, { scheduledAt: 'asc' }],
     });
 
-    if (!job) {
-      // no job found, sleeping for 10s
-      this.timeout = setTimeout(() => this.run(), 10_000);
+    if (!nextJob) {
+      if (!this.shuttingDown) {
+        this.pollTimeout = setTimeout(() => void this.pollAndRunNextJob(), 10_000);
+      } else {
+        console.log('Shutting down...');
+      }
       return;
     }
 
-    // run job
-    // await runJob(job);
+    // execute the next job
+    await executeJob(nextJob);
 
-    // if not shutting down, queue run again in 1s
+    // continue polling unless the worker is shutting down
     if (!this.shuttingDown) {
-      this.timeout = setTimeout(() => this.run(), 1_000);
+      this.pollTimeout = setTimeout(() => void this.pollAndRunNextJob(), 1_000);
     } else {
       console.log('Shutting down...');
     }
-  }
+  },
 }

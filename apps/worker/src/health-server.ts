@@ -1,15 +1,16 @@
 import { createServer } from "node:http";
-
-import { worker } from './worker';
 import { styleText } from "node:util";
 
-const server = createServer((_, res) => {
-  // calculate the time since last worker run
-  const now = new Date();
-  const minutesSinceLastJob = (now.valueOf() - worker.lastJob.valueOf()) / 1000 / 60;
+import { worker } from './worker';
 
-  // if this worker hasn't checked for a new job in > 15 minutes, report unhealthy
-  if (minutesSinceLastJob > 15) {
+const HEALTH_TIMEOUT_MINUTES = 15;
+
+const server = createServer((_req, res) => {
+  // calculate the time since last worker poll
+  const minutesSinceLastPoll = (Date.now() - worker.lastPollAt.valueOf()) / 1000 / 60;
+
+  // if the worker hasn't polled for a job in too long, report unhealthy
+  if (minutesSinceLastPoll > HEALTH_TIMEOUT_MINUTES) {
     res.writeHead(503);
     res.end('DOWN');
   } else {
@@ -27,10 +28,17 @@ export const healthServer = {
     return new Promise<void>((resolve) => {
       server.listen(process.env.HEALTH_PORT, undefined, () => {
         const address = server.address();
-        console.log(`Health Server running on ${styleText('blue', typeof address === 'string' ? address : `http://localhost:${address?.port}`)}`);
+        const url =
+          typeof address === 'string'
+            ? address
+            : address
+              ? `http://localhost:${address.port}`
+              : 'unknown';
+
+              console.log(`Health Server running on ${styleText("blue", url)}`);
 
         resolve();
       });
     });
-  }
+  },
 };
