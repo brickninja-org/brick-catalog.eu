@@ -1,0 +1,20 @@
+name: Validate renovate config
+on:
+  workflow_call:
+
+env:
+  # renovate: datasource=npm packageName=renovate
+  RENOVATE_VERSION: 43.46.6
+
+jobs:
+  validate-config:
+    name: Validate config
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+      with:
+        node-version: 24.14.0
+        package-manager-cache: false
+    - name: Validate config
+      run: npx -p renovate@${{ env.RENOVATE_VERSION }} renovate-config-validator --strict
