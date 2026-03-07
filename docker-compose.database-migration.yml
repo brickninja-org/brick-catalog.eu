@@ -1,0 +1,11 @@
+services:
+  database-old:
+    image: timescale/timescaledb:2.16.1-pg16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=brickcatalog
+      - POSTGRES_PASSWORD=brickcatalog
+      - POSTGRES_DB=brickcatalog
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - .docker/database-pg16:/var/lib/postgresql/data
