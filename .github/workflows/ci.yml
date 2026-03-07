@@ -10,7 +10,27 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+
 jobs:
   build:
     name: Build
     uses: ./.github/workflows/build-node.yml
+
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
+
+  renovate:
+    name: Renovate
+    uses: ./.github/workflows/renovate-validate-config.yml
+
+  success:
+    name: Success
+    needs: [build, lint, renovate]
+    runs-on: ubuntu-24.04
+    if: always()
+    steps:
+      - name: Check job status
+        run: jq --exit-status 'all(.result == "success")' <<< '${{ toJson(needs) }}'
+      - name: Success
+        run: exit 0
