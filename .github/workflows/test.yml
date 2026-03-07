@@ -1,0 +1,19 @@
+name: Test
+on:
+  workflow_call:
+
+jobs:
+  unit:
+    name: Unit
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Setup Node.js env
+        uses: ./.github/actions/setup-node-env
+        with:
+          cache-key: test
+      - name: Setup playwright
+        # install chromium including system dependencies and without headless shell (we use the real browser in headless mode)
+        run: pnpm dlx playwright install chromium --with-deps --no-shell
+      - name: Run Test
+        run: pnpm run test

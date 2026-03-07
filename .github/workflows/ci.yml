@@ -16,6 +16,10 @@ jobs:
     name: Build
     uses: ./.github/workflows/build-node.yml
 
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+
   lint:
     name: Lint
     uses: ./.github/workflows/lint.yml
@@ -26,7 +30,7 @@ jobs:
 
   success:
     name: Success
-    needs: [build, lint, renovate]
+    needs: [build, test, lint, renovate]
     runs-on: ubuntu-24.04
     if: always()
     steps:

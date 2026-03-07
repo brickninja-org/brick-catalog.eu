@@ -6,7 +6,7 @@ const rl = readline.createInterface({
   terminal: false
 });
 
-// acf45ebc18f8bbc44e5a084e31051212ba6078c0f6764cb6ab5102663dadcf89 /gw2treasurescom-database-1 true 0
+// acf45ebc18f8bbc44e5a084e31051212ba6078c0f6764cb6ab5102663dadcf89 /brickcatalogeu-database-1 true 0
 const regex = /^([0-9a-f]{64}) ([^ ]+) ([^ ]+) ([0-9]+)$/
 
 rl.on('line', (line) => {
