@@ -10,9 +10,6 @@
   "kubernetes": {
     "managerFilePatterns": ["/kubernetes/.+\\.yaml$/"]
   },
-  "github-submodules": {
-    "enabled": true
-  },
   "postUpdateOptions": ["pnpmDedupe"],
   "packageRules": [
     {
@@ -41,6 +38,27 @@
       "matchFileNames": ["packages/{standard,helper}/package.json"],
       "matchDepTypes": ["dependencies"],
       "rangeStrategy": "replace"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update version variables in Docker files",
+      "managerFilePatterns": [
+        "/(^|/|\\.)Dockerfile$/",
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG) .+?_version=(?<currentValue>.+?)\\s"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update version variables in GitHub Actions workflows",
+      "managerFilePatterns": ["/^\\.github/(workflows|actions)/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s+.+?_VERSION: (?<currentValue>.+?)\\s"
+      ]
     }
   ]
 }
