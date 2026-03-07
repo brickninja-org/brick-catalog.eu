@@ -1,5 +1,5 @@
-import { db } from "./db";
-import { executeJob } from "./execute-job";
+import { db } from './db';
+import { executeJob } from './execute-job';
 
 export const worker = {
   pollTimeout: undefined as NodeJS.Timeout | undefined,
@@ -40,6 +40,7 @@ export const worker = {
       } else {
         console.log('Shutting down...');
       }
+
       return;
     }
 
@@ -53,4 +54,4 @@ export const worker = {
       console.log('Shutting down...');
     }
   },
-}
+};

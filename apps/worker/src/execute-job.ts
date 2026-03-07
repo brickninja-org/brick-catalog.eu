@@ -1,10 +1,11 @@
-import type { Job } from "@brickcatalog/database";
+import type { Job } from '@brickcatalog/database';
+
+import { styleText } from 'node:util';
 
 import { CronExpressionParser } from 'cron-parser';
-import { styleText } from "node:util";
 
-import { db } from "./db";
-import { jobRegistry } from "./jobs/job-registry";
+import { db } from './db';
+import { jobRegistry } from './jobs/job-registry';
 
 export async function executeJob(job: Job) {
   const startedAt = new Date();
@@ -18,6 +19,7 @@ export async function executeJob(job: Job) {
 
   if (claimResult.count === 0) {
     console.log(styleText('yellow', `Job ${job.id} already claimed by another worker`));
+
     return;
   }
 
@@ -53,7 +55,7 @@ export async function executeJob(job: Job) {
     const jobError = error as Error;
 
     console.error(styleText('red', '>'), jobError);
-    console.log()
+    console.log();
 
     await db.job.update({
       where: { id: job.id },

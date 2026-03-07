@@ -1,5 +1,5 @@
-import { createServer } from "node:http";
-import { styleText } from "node:util";
+import { createServer } from 'node:http';
+import { styleText } from 'node:util';
 
 import { worker } from './worker';
 
@@ -35,8 +35,7 @@ export const healthServer = {
               ? `http://localhost:${address.port}`
               : 'unknown';
 
-              console.log(`Health Server running on ${styleText("blue", url)}`);
-
+        console.log(`Health Server running on ${styleText('blue', url)}`);
         resolve();
       });
     });

@@ -1,11 +1,13 @@
-import type { Prisma } from "@brickcatalog/database";
-import type { JobName } from "./job-registry";
+import type { JobName } from './job-registry';
+import type { Prisma } from '@brickcatalog/database';
 
-import { styleText } from "node:util";
-import CronExpressionParser from "cron-parser";
+import { styleText } from 'node:util';
 
-import { db } from "../db";
-import { toId } from "./jobs/helper/toId";
+import CronExpressionParser from 'cron-parser';
+
+import { db } from '../db';
+
+import { toId } from './jobs/helper/toId';
 
 const cronSchedules = {
   daily: 'H H * * *',
@@ -31,7 +33,7 @@ async function registerCronJob(
     where: { type: jobName, cron: { not: '' }},
   });
 
-  if (existingCronJobs.length >  1) {
+  if (existingCronJobs.length > 1) {
     console.warn(`Found multiple cron jobs for ${styleText('blue', jobName)}. Deleting superfluous jobs.`);
 
     await db.job.deleteMany({
@@ -65,6 +67,7 @@ async function registerCronJob(
     console.log(`Updating cron job ${styleText('blue', jobName)}...`);
 
     const scheduledAt = CronExpressionParser.parse(cronExpression, { tz: 'utc', hashSeed: jobName }).next().toDate();
+
     await db.job.update({
       where: { id: existingCronJob.id },
       data: { payload, cron: cronExpression, scheduledAt },

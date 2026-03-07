@@ -1,6 +1,6 @@
-import type { JobDefinition } from "./job-definition";
+import type { JobDefinition } from './job-definition';
 
-import { CleanupJobsJob } from "./jobs/cleanup";
+import { CleanupJobsJob } from './jobs/cleanup';
 
 export const jobDefinitions = {
   'system.test-run': { run: () => undefined },
