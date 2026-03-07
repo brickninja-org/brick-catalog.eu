@@ -3,6 +3,7 @@ import type { PrismaClient } from '@brickcatalog/database';
 import { createPrismaClient } from '@brickcatalog/database/setup';
 
 const datasourceURL = new URL(process.env.DATABASE_URL!);
+
 datasourceURL.searchParams.set('application_name', 'worker');
 
 export const db = createPrismaClient(datasourceURL.toString(), {
@@ -17,4 +18,4 @@ db.$on('query', (event) => {
   if (!dbDebug.log) return;
 
   console.log('query', event.query, `(${event.duration} ms)`);
-})
+});

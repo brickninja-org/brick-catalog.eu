@@ -1,8 +1,9 @@
+import type { Prisma } from './generated/prisma/client.js';
 import type { LogOptions } from './generated/prisma/internal/class.js';
-import type { Prisma } from "./generated/prisma/client.js";
 
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from "./generated/prisma/client.js";
+
+import { PrismaClient } from './generated/prisma/client.js';
 
 type PrismaOptions = Omit<Prisma.PrismaClientOptions, 'adapter' | 'accelerateUrl'>;
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/order
 import './load-env';
 import { startManualJob } from './execute-job';
 import { healthServer } from './health-server';
