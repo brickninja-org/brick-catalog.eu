@@ -1,22 +1,20 @@
 import { defineConfig } from 'eslint/config';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
 import baseConfig from './base.mjs';
 
 const config = defineConfig(
-  // extend ./base
-  ...baseConfig,
+  baseConfig,
+  reactPlugin.configs.flat.recommended,
+  reactHooksPlugin.configs.flat.recommended,
   {
-    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
-    plugins: {
-      'react': reactPlugin,
-      'react-hooks': reactHooksPlugin,
+    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx,mts,cts}'],
+    languageOptions: {
+      globals: globals.browser,
     },
     rules: {
-      ...reactPlugin.configs.recommended.rules,
-      ...reactHooksPlugin.configs.recommended.rules,
-      // Custom overrides
       'react-hooks/exhaustive-deps': 'off',
       'react/jsx-boolean-value': [
         'error',
@@ -32,6 +30,11 @@ const config = defineConfig(
           props: 'never',
         },
       ],
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
 );
