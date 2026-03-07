@@ -1,14 +1,15 @@
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 import ts from 'typescript-eslint';
 
-const config = defineConfig([
+const config = defineConfig(
   js.configs.recommended,
   ts.configs.recommended,
+
   {
-    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
+    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx,mts,cts}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -28,11 +29,11 @@ const config = defineConfig([
       '@stylistic/arrow-spacing': 'warn',
       // `foo( bar )` → `foo(bar)`
       '@stylistic/space-in-parens': 'warn',
-      // disallows multipe spaces
+      // disallows multiple spaces
       '@stylistic/no-multi-spaces': 'warn',
       // disallow multiple empty lines
       '@stylistic/no-multiple-empty-lines': 'warn',
-      // only 1 property per line for objects (enforced only for > 3 properties or multiline values)
+      // only 1 property per line for objects (enforced only for multiline objects)
       '@stylistic/object-curly-newline': ['warn', { multiline: true, consistent: true }],
       // `{foo: bar}` → `{ foo: bar }`
       '@stylistic/object-curly-spacing': ['warn', 'always', { objectsInObjects: false }],
@@ -51,30 +52,14 @@ const config = defineConfig([
       // require semicolon
       '@stylistic/semi': 'warn',
       // no unnecessary semicolon
-      '@stylistic/no-extra-semi': ['warn'],
+      '@stylistic/no-extra-semi': 'warn',
       // disallows async functions not using await
       'require-await': 'warn',
 
-      // require dependencies to be in package.json
-      // 'import/no-extraneous-dependencies': 'error',
       // disable import/no-unresolved, ts is already handling this
       'import/no-unresolved': 'off',
       // require node protocol in imports (`import { x } from 'node:util'`)
       'import/enforce-node-protocol-usage': ['warn', 'always'],
-      // `const foo:Bar` → `const foo: Bar`
-      '@stylistic/type-annotation-spacing': 'warn',
-      // `class foo_bar` → `class FooBar`
-      '@typescript-eslint/naming-convention': [
-        'warn',
-        { selector: 'default', format: null },
-        { selector: 'typeLike', format: ['PascalCase'] }
-      ],
-      // require comma as delimiter in typescript interfaces and type aliases
-      '@stylistic/member-delimiter-style': ['warn', {
-        multiline: { delimiter: 'comma', requireLast: true },
-        singleline: { delimiter: 'comma', requireLast: false },
-      }],
-
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       'import/newline-after-import': ['error', { count: 1 }],
       'import/no-duplicates': 'error',
@@ -135,34 +120,49 @@ const config = defineConfig([
         'error',
         { blankLine: 'always', next: '*', prev: 'directive' },
         { blankLine: 'any', next: 'directive', prev: 'directive' },
-        { blankLine: 'always', next: '*', prev: ['const', 'let', 'var'] },
-        { blankLine: 'any', next: ['const', 'let', 'var'], prev: ['const', 'let', 'var'] },
         { blankLine: 'always', next: 'return', prev: '*' },
       ],
     },
   },
+
   {
-    files: ['.*.js', '.*.cjs', '.*.mjs'],
+    files: ['**/*.{ts,tsx,mts,cts}'],
+    rules: {
+      // `const foo:Bar` → `const foo: Bar`
+      '@stylistic/type-annotation-spacing': 'warn',
+      // `class foo_bar` → `class FooBar`
+      '@typescript-eslint/naming-convention': [
+        'warn',
+        { selector: 'default', format: null },
+        { selector: 'typeLike', format: ['PascalCase'] },
+      ],
+      // require comma as delimiter in typescript interfaces and type aliases
+      '@stylistic/member-delimiter-style': ['warn', {
+        multiline: { delimiter: 'comma', requireLast: true },
+        singleline: { delimiter: 'comma', requireLast: false },
+      }],
+    },
+  },
+
+  {
+    files: ['**/.*.{js,cjs,mjs}'],
     ...ts.configs.disableTypeChecked,
   },
-  {
-    ignores: [
-      '**/.temp/**',
-      '**/.next/**',
-      '**/.swc/**',
-      '**/.turbo/**',
-      '**/.cache/**',
-      '**/.build/**',
-      '**/.vercel/**',
-      '**/.DS_Store',
-      '**/dist/**',
-      '**/node_modules/**',
-      '**/pnpm-lock.yaml',
-      '**/next-env.d.ts',
-      '!.vscode/**',
-      '!scripts/**',
-    ],
-  },
-]);
+
+  globalIgnores([
+    '**/.temp/**',
+    '**/.next/**',
+    '**/.swc/**',
+    '**/.turbo/**',
+    '**/.cache/**',
+    '**/.build/**',
+    '**/.vercel/**',
+    '**/.DS_Store',
+    '**/dist/**',
+    '**/node_modules/**',
+    '**/pnpm-lock.yaml',
+    '**/next-env.d.ts',
+  ]),
+);
 
 export default config;
