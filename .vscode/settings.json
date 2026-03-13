@@ -2,9 +2,10 @@
   "js/ts.tsdk.path": "node_modules/typescript/lib",
   "js/ts.tsdk.promptToUseWorkspaceVersion": true,
   "files.associations": {
-    "**/packages/standard/eslint/*.json": "jsonc"
+    "**/packages/standard/eslint/*.json": "jsonc",
+    "*.css": "tailwindcss"
   },
   "eslint.workingDirectories": [
     { "mode": "auto" }
-  ]
+  ],
 }

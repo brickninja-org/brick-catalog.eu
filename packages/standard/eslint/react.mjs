@@ -30,6 +30,27 @@ const config = defineConfig(
           props: 'never',
         },
       ],
+      'react/jsx-sort-props': [
+        'error',
+        {
+          callbacksLast: true,
+          ignoreCase: true,
+          locale: 'auto',
+          multiline: 'last',
+          noSortAlphabetically: false,
+          reservedFirst: true,
+          shorthandFirst: true,
+          shorthandLast: false,
+        },
+      ],
+      'react/react-in-jsx-scope': 'off',
+      'react/self-closing-comp': [
+        'error',
+        {
+          component: true,
+          html: true,
+        },
+      ],
     },
     settings: {
       react: {
