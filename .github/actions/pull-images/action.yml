@@ -5,22 +5,10 @@ inputs:
   platform:
     description: The platform (amd64/arm64)
     required: true
-  ghcr-username:
-    description: GitHub Container Registry username
-    required: true
-  ghcr-token:
-    description: GitHub Container Registry token
-    required: true
 
 runs:
   using: composite
   steps:
-  - name: Login to GitHub Container Registry
-    uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
-    with:
-      registry: ghcr.io
-      username: ${{ inputs.ghcr-username }}
-      password: ${{ inputs.ghcr-token }}
   - name: Download digests
     uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
     with:
