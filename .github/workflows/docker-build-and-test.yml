@@ -38,3 +38,59 @@ jobs:
         with:
           images: ${{ env.IMAGE_ID }}
           bake-target: ${{ matrix.target }}
+      - name: Build the Docker image
+        id: build
+        uses: docker/bake-action@82490499d2e5613fcead7e128237ef0b0ea210f7 # v7.0.0
+        with:
+          source: .
+          files: |
+            ./docker-compose.yml
+            ${{ steps.meta.outputs.bake-file-labels }}
+          targets: ${{ matrix.target }}
+          set: |
+            ${{ matrix.target }}.output=type=image,push-by-digest=true,name-canonical=true,push=true
+            ${{ matrix.target }}.tags=${{ env.IMAGE_ID }}
+            ${{ matrix.target }}.args.deployment_id=${{ github.run_id }}
+            *.platform=linux/${{ inputs.platform }}
+            *.cache-from=type=gha,scope=build-${{ inputs.platform }}-${{ matrix.target }}
+            *.cache-to=type=gha,scope=build-${{ inputs.platform }}-${{ matrix.target }},mode=max,ignore-error=true
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests/${{ matrix.target }}
+          digest=$(jq -cr '."${{ matrix.target }}"."containerimage.digest"' << 'EOF'
+          ${{ steps.build.outputs.metadata }}
+          EOF
+          )
+          touch "/tmp/digests/${{ matrix.target }}/${digest#sha256:}"
+      - name: Upload digest
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+        with:
+          name: docker-digests-${{ inputs.platform }}-${{ matrix.target }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  test-kubernetes:
+    name: 'Test: kubernetes'
+    runs-on: ubuntu-24.04
+    if: inputs.platform == 'amd64'
+    needs: build
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: nolar/setup-k3d-k3s@v1
+        with:
+          version: v1.33
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/pull-images
+        with:
+          platform: ${{ inputs.platform }}
+      - name: Import images into k3d
+        run: k3d image import brickcatalog/worker brickcatalog/database-migration
+      - run: kubectl apply -k kubernetes/local
+      - run: kubectl rollout status deployment database-pg17 worker -n brick-catalog --timeout=180s
+      - run: kubectl get deployment -n brick-catalog
+        if: success() || failure()
+      - run: kubectl get job -n brick-catalog
+        if: success() || failure()
+      - run: kubectl logs -l app.kubernetes.io/part-of=brick-catalog -n brick-catalog --all-containers --ignore-errors
+        if: failure() || runner.debug == '1'
