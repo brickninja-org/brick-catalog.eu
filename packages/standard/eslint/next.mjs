@@ -1,23 +1,23 @@
-import { defineConfig } from 'eslint/config';
-import nextVitals from 'eslint-config-next/core-web-vitals';
-import nextTs from 'eslint-config-next/typescript';
-import reactPlugin from 'eslint-plugin-react';
-import globals from 'globals';
+import nextConfig from '@next/eslint-plugin-next';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-import baseConfig from './base.mjs';
+import reactConfig from './react.mjs';
 
 const config = defineConfig(
-  nextVitals,
-  nextTs,
-  baseConfig,
+  // ignore Next.js generated files
+  globalIgnores([
+    '.next/',
+    'next-env.d.ts',
+  ]),
+
+  // extends next/core-web-vitals
+  nextConfig.configs['core-web-vitals'],
+
+  // extend ./react.mjs
+  ...reactConfig,
+
   {
     files: ['**/*.{js,mjs,cjs,jsx,ts,tsx,mts,cts}'],
-    languageOptions: {
-      globals: globals.browser,
-    },
-    plugins: {
-      react: reactPlugin,
-    },
     rules: {
       '@next/next/no-html-link-for-pages': 'off',
       '@next/next/no-img-element': 'off',

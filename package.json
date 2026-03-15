@@ -14,6 +14,7 @@
   "devDependencies": {
     "@brickninja/standard": "workspace:*",
     "@eslint/js": "9.39.4",
+    "@next/eslint-plugin-next": "16.1.6",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/node": "24.12.0",
     "eslint": "9.39.4",
