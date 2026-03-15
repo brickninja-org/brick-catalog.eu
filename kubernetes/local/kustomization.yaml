@@ -7,18 +7,13 @@ commonLabels:
 
 resources:
 - ../base
-- next
 - database
 
 images:
-- name: ghcr.io/brickninja-org/brick-catalog.eu/web
-  newTag: latest
-  newName: brick-catalog/web
-  
 - name: ghcr.io/brickninja-org/brick-catalog.eu/worker
   newTag: latest
-  newName: brick-catalog/worker
+  newName: brickcatalog/worker
 
 - name: ghcr.io/brickninja-org/brick-catalog.eu/database-migration
   newTag: latest
-  newName: brick-catalog/database-migration
+  newName: brickcatalog/database-migration
