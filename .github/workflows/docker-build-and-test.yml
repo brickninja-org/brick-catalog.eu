@@ -84,6 +84,8 @@ jobs:
       - uses: ./.github/actions/pull-images
         with:
           platform: ${{ inputs.platform }}
+          ghcr-username: ${{ github.actor }}
+          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Import images into k3d
         run: k3d image import brickcatalog/worker brickcatalog/database-migration
       - run: kubectl apply -k kubernetes/local
