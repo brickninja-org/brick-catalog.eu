@@ -16,6 +16,15 @@ jobs:
     name: Build
     uses: ./.github/workflows/build-node.yml
 
+  docker:
+    name: Docker (${{ matrix.platform }})
+    strategy:
+      matrix:
+        platform: [ amd64 ]
+    uses: ./.github/workflows/docker-build-and-test.yml
+    with:
+      platform: ${{ matrix.platform }}
+
   test:
     name: Test
     uses: ./.github/workflows/test.yml
@@ -30,7 +39,7 @@ jobs:
 
   success:
     name: Success
-    needs: [build, test, lint, renovate]
+    needs: [build, docker, test, lint, renovate]
     runs-on: ubuntu-24.04
     if: always()
     steps:
@@ -38,3 +47,9 @@ jobs:
         run: jq --exit-status 'all(.result == "success")' <<< '${{ toJson(needs) }}'
       - name: Success
         run: exit 0
+
+  publish-docker:
+    name: Publish (docker)
+    if: github.event_name != 'merge_group'
+    needs: [success]
+    uses: ./.github/workflows/publish-docker.yml

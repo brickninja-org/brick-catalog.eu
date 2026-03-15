@@ -1,0 +1,80 @@
+name: Publish (docker)
+on:
+  workflow_call:
+
+jobs:
+  publish:
+    name: ${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+      packages: write
+      artifact-metadata: write
+    strategy:
+      matrix:
+        target: [ worker, database-migration ]
+    steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+
+    - name: Generate image name
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository }}/${{ matrix.target }}
+        # Change all uppercase to lowercase
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_ENV"
+
+    - name: Download digests
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+      with:
+        path: /tmp/digests
+        pattern: docker-digests-*
+        merge-multiple: true
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6
+      with:
+        images: ${{ env.IMAGE_ID }}
+        flavor: |
+          latest=false
+        tags: |
+          # set latest tag for default branch
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=ref,event=tag
+          type=ref,event=pr
+        annotations: |
+          org.opencontainers.image.description=${{ matrix.target }} image for gw2treasures.com
+      env:
+        DOCKER_METADATA_ANNOTATIONS_LEVELS: index
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Merge and push image
+      id: image
+      run: |
+        ARGS=$(jq -cr '(.tags | map("--tag " + (. | @sh))) + (.annotations | map("--annotation " + (. | @sh))) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+        SOURCES=$(find /tmp/digests/${{ matrix.target }} -type f -printf '${{ env.IMAGE_ID }}@sha256:%f ')
+        echo "$ARGS"
+        echo "$SOURCES"
+
+        eval "docker buildx imagetools create $ARGS $SOURCES"
+
+        echo "digest=$(docker buildx imagetools inspect --format '{{json .Manifest}}' ${{ env.IMAGE_ID }}:${{ steps.meta.outputs.version }} | jq -cr '.digest')" >> "$GITHUB_OUTPUT"
+
+    - name: Attest
+      uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+      with:
+        subject-name: ${{ env.IMAGE_ID }}
+        subject-digest: ${{ steps.image.outputs.digest }}
+        push-to-registry: true
+
+    - name: Inspect image
+      run: docker buildx imagetools inspect $(jq -cr '.tags[0]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
