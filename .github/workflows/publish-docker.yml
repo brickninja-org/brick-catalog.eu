@@ -46,7 +46,7 @@ jobs:
           type=ref,event=tag
           type=ref,event=pr
         annotations: |
-          org.opencontainers.image.description=${{ matrix.target }} image for gw2treasures.com
+          org.opencontainers.image.description=${{ matrix.target }} image for brick-catalog.eu
       env:
         DOCKER_METADATA_ANNOTATIONS_LEVELS: index
 
