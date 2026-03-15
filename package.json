@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run build",
+    "dev:web": "PNPM_VERIFY_DEPS_BEFORE_RUN=false FORCE_COLOR=1 turbo run dev --filter=web",
     "dev:worker": "PNPM_VERIFY_DEPS_BEFORE_RUN=false FORCE_COLOR=1 turbo run dev --filter=worker",
     "lint": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run lint --continue -- -f gha",
     "prisma:studio": "PNPM_VERIFY_DEPS_BEFORE_RUN=false pnpm run --filter @brickcatalog/database prisma:studio",

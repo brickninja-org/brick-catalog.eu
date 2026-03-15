@@ -20,7 +20,7 @@ runs:
     run: |
       DOCKER_PREFIX=ghcr.io/${{ github.repository }}
       DOCKER_PREFIX=$(echo $DOCKER_PREFIX | tr '[A-Z]' '[a-z]')
-      for TARGET in worker database-migration
+      for TARGET in web worker database-migration
       do
         digests=(/tmp/digests/"$TARGET"/*)
         digest=$(basename $digests)

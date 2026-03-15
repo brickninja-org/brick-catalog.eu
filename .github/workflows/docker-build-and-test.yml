@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ inputs.platform == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-24.04' }}
     strategy:
       matrix:
-        target: [ worker, database-migration ]
+        target: [ web, worker, database-migration ]
     steps:
       # https://github.com/actions/virtual-environments/issues/1187
       - name: Tune linux network

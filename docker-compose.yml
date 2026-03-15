@@ -1,4 +1,17 @@
 services:
+  web:
+    image: brickcatalog/web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://brickcatalog:brickcatalog@database:5432/brickcatalog?schema=public
+      - BC_URL=http://brickcatalog.localhost:3000
+      - FORCE_COLOR=1
+    ports:
+      - 3000:3000
+
   worker:
     image: brickcatalog/worker
     build:
