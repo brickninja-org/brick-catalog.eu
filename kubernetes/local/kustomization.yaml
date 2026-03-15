@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: brick-catalog
+
+commonLabels:
+  app.kubernetes.io/part-of: brick-catalog
+
+resources:
+- ../base
+- next
+- database
+
+images:
+- name: ghcr.io/brickninja-org/brick-catalog.eu/web
+  newTag: latest
+  newName: brick-catalog/web
+  
+- name: ghcr.io/brickninja-org/brick-catalog.eu/worker
+  newTag: latest
+  newName: brick-catalog/worker
+
+- name: ghcr.io/brickninja-org/brick-catalog.eu/database-migration
+  newTag: latest
+  newName: brick-catalog/database-migration

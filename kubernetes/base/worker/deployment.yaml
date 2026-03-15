@@ -1,0 +1,65 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: worker
+
+spec:
+  replicas: 5
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      name: worker
+  template:
+    metadata:
+      labels:
+        name: worker
+    spec:
+      containers:
+      - name: worker
+        image: ghcr.io/brickninja-org/brick-catalog.eu/worker:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "10m"
+          limits:
+            memory: "200Mi"
+            cpu: "150m"
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: next
+              key: db
+        - name: WORKER_BC_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: worker
+              key: bc-api-key
+              optional: true
+        - name: HEALTH_PORT
+          value: "9090"
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            port: 9090
+          initialDelaySeconds: 3
+          timeoutSeconds: 3
+          failureThreshold: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            port: 9090
+          initialDelaySeconds: 3
+          timeoutSeconds: 3
+          failureThreshold: 6
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30    

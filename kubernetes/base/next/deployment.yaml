@@ -1,0 +1,87 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: next
+
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      name: next
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        name: next
+    spec:
+      containers:
+      - name: next
+        image: ghcr.io/brickninja-org/brick-catalog.eu/web:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: next
+              key: db
+        - name: BN_URL
+          valueFrom:
+            configMapKeyRef:
+              name: next
+              key: url
+        - name: BN_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: next
+              key: bn_client_id
+              optional: true
+        - name: BN_CLIENT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: next
+              key: bn_client_secret
+              optional: true
+        - name: SIGNING_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: next
+              key: signing_key
+              optional: true
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            port: 3000
+            path: "/_/health"
+          initialDelaySeconds: 3
+          timeoutSeconds: 1
+          failureThreshold: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            port: 3000
+            path: "/_/health"
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+          failureThreshold: 6
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30    
