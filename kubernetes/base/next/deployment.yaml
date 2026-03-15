@@ -37,7 +37,7 @@ spec:
             configMapKeyRef:
               name: next
               key: db
-        - name: BN_URL
+        - name: BC_URL
           valueFrom:
             configMapKeyRef:
               name: next
