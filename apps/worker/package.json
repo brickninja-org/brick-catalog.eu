@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@brickninja/standard": "workspace:*",
-    "@types/node": "24.12.0",
+    "@types/node": "24.12.2",
     "@vercel/ncc": "0.38.4"
   }
 }
