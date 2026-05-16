@@ -6,22 +6,43 @@
   "types": ".",
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "build:raw": "next build --webpack",
+    "build": "next build --webpack --debug-build-paths '*'",
     "start": "next start",
+    "test": "vitest run",
+    "test:format": "vitest run src/components/format/FormatCurrency.test.ts src/components/format/FormatWeight.test.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@brickcatalog/database": "workspace:*",
+    "@brickninja-org/helper": "workspace:*",
+    "@brickninja-org/ui": "workspace:*",
+    "@floating-ui/react": "0.27.19",
     "@formatjs/intl-localematcher": "0.8.2",
+    "@gravity-ui/icons": "^2.18.0",
+    "@heroui-pro/react": "1.0.0-beta.2",
+    "@heroui/react": "3.0.3",
+    "@number-flow/react": "^0.5.14",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "motion": "^12.34.3",
     "negotiator": "1.0.0",
     "next": "16.2.1",
     "react": "19.2.4",
+    "react-aria-components": "^1.17.0",
     "react-dom": "19.2.4",
-    "server-only": "0.0.1"
+    "react-error-boundary": "6.1.1",
+    "react-resizable-panels": "^4.10.0",
+    "recharts": "^2.15.4",
+    "server-only": "0.0.1",
+    "tailwind-merge": "^3.4.0",
+    "tailwind-variants": "^3.2.0"
   },
   "devDependencies": {
-    "@brickninja/standard": "workspace:*",
+    "@brickninja-org/standard": "workspace:*",
+    "@brickninjaapi/types": "0.3.0",
+    "@heroui/styles": "3.0.3",
     "@tailwindcss/postcss": "4.2.2",
     "@types/negotiator": "0.6.4",
     "@types/node": "24.12.0",
@@ -30,8 +51,9 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.1",
-    "tailwindcss": "4.2.2",
+    "tailwindcss": "^4.0.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.57.1"
+    "typescript-eslint": "8.57.1",
+    "vitest": "^4.1.6"
   }
 }
