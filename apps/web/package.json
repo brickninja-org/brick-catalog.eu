@@ -10,7 +10,7 @@
     "build": "next build --webpack --debug-build-paths '*'",
     "start": "next start",
     "test": "vitest run",
-    "test:format": "vitest run src/components/format/FormatCurrency.test.ts src/components/format/FormatWeight.test.ts",
+    "test:format": "vitest run src/components/format/FormatCurrency.test.ts src/components/format/FormatWeight.test.ts src/components/format/FormatDate.logic.test.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
