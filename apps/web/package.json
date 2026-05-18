@@ -10,7 +10,7 @@
     "build": "next build --webpack --debug-build-paths '*'",
     "start": "next start",
     "test": "vitest run",
-    "test:format": "vitest run src/components/format/FormatCurrency.test.ts src/components/format/FormatWeight.test.ts src/components/format/FormatDate.logic.test.ts src/components/format/FormatContext.logic.test.ts",
+    "test:format": "vitest run src/components/format/FormatCurrency.test.ts src/components/format/FormatWeight.test.ts src/components/format/FormatDate.logic.test.ts src/components/format/FormatContext.logic.test.ts src/components/format/formatting.test.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -21,8 +21,8 @@
     "@floating-ui/react": "0.27.19",
     "@formatjs/intl-localematcher": "0.8.2",
     "@gravity-ui/icons": "^2.18.0",
-    "@heroui-pro/react": "1.0.0-beta.2",
-    "@heroui/react": "3.0.3",
+    "@heroui-pro/react": "1.0.0-beta.4",
+    "@heroui/react": "3.0.5",
     "@number-flow/react": "^0.5.14",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@brickninja-org/standard": "workspace:*",
     "@brickninjaapi/types": "0.3.0",
-    "@heroui/styles": "3.0.3",
+    "@heroui/styles": "3.0.5",
     "@tailwindcss/postcss": "4.2.2",
     "@types/negotiator": "0.6.4",
     "@types/node": "24.12.0",
