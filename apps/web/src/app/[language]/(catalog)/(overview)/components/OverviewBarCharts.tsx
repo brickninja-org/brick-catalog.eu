@@ -1,55 +1,71 @@
-import { Card } from '@heroui/react/card';
-import { Suspense } from 'react';
+import type { OverviewData } from './overview-data';
+import type { Language } from '@brickcatalog/database';
 
-import { getPieceTypeSummaryByYear } from '@/queries/elements/piece-type-summary-by-year';
-import { getYearlyElements } from '@/queries/elements/yearly-statistics';
-
-import { OverviewChartCardSkeleton } from './OverviewSkeletons';
+import { OverviewEmptyStateCard } from './OverviewEmptyStateCard';
 import { PieceTypeBreakdownBarChart } from './PieceTypeBreakdownBarChart.client';
 import { YearlyElementsBarChart } from './YearlyElementsBarChart.client';
 
-async function YearlyElementsChartContent() {
-  const data = await getYearlyElements();
-
-  return <YearlyElementsBarChart data={data}/>;
+interface OverviewBarChartsProps {
+  language: Language,
+  yearlyData: OverviewData['yearlyData'],
+  pieceTypeSummary: OverviewData['pieceTypeSummary'],
+  translations: {
+    yearlyTitle: string,
+    yearlyDescription: string,
+    yearlyOpenAriaLabel: string,
+    yearlyTooltipLabelPrefix: string,
+    pieceTypeTitle: string,
+    pieceTypeDescription: string,
+    pieceTypeOpenAriaLabel: string,
+    pieceTypeEmptyState: string,
+    pieceTypeTotalLabel: string,
+    pieceTypeLegoLabel: string,
+    pieceTypeDuploLabel: string,
+    pieceTypeTechnicLabel: string,
+  },
 }
 
-async function PieceTypeBreakdownChartContent() {
-  const summary = await getPieceTypeSummaryByYear();
-
-  if (!summary) {
-    return (
-      <Card>
-        <Card.Content>
-          <p className="text-muted text-sm">No piece type data available yet.</p>
-        </Card.Content>
-      </Card>
-    );
-  }
-
+export function YearlyElementsChart({
+  language,
+  yearlyData,
+  translations,
+}: Pick<OverviewBarChartsProps, 'language' | 'yearlyData' | 'translations'>) {
   return (
-    <PieceTypeBreakdownBarChart
-      duplo={summary.duplo}
-      lego={summary.lego}
-      technic={summary.technic}
-      total={summary.total}
-      year={summary.year}
+    <YearlyElementsBarChart
+      data={yearlyData}
+      description={translations.yearlyDescription}
+      language={language}
+      openAriaLabel={translations.yearlyOpenAriaLabel}
+      title={translations.yearlyTitle}
+      tooltipLabelPrefix={translations.yearlyTooltipLabelPrefix}
     />
   );
 }
 
-export function YearlyElementsChart() {
-  return (
-    <Suspense fallback={<OverviewChartCardSkeleton/>}>
-      <YearlyElementsChartContent/>
-    </Suspense>
-  );
-}
+export function PieceTypeBreakdownChart({
+  language,
+  pieceTypeSummary,
+  translations,
+}: Pick<OverviewBarChartsProps, 'language' | 'pieceTypeSummary' | 'translations'>) {
+  if (!pieceTypeSummary) {
+    return <OverviewEmptyStateCard message={translations.pieceTypeEmptyState}/>;
+  }
 
-export function PieceTypeBreakdownChart() {
   return (
-    <Suspense fallback={<OverviewChartCardSkeleton/>}>
-      <PieceTypeBreakdownChartContent/>
-    </Suspense>
+    <PieceTypeBreakdownBarChart
+      description={translations.pieceTypeDescription}
+      duplo={pieceTypeSummary.duplo}
+      duploLabel={translations.pieceTypeDuploLabel}
+      language={language}
+      lego={pieceTypeSummary.lego}
+      legoLabel={translations.pieceTypeLegoLabel}
+      openAriaLabel={translations.pieceTypeOpenAriaLabel}
+      technic={pieceTypeSummary.technic}
+      technicLabel={translations.pieceTypeTechnicLabel}
+      title={translations.pieceTypeTitle}
+      total={pieceTypeSummary.total}
+      totalLabel={translations.pieceTypeTotalLabel}
+      year={pieceTypeSummary.year}
+    />
   );
 }
