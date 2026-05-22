@@ -65,5 +65,7 @@
   "search.results.elements.subcategories": "Kategorien",
   "search.results.pages": "Seiten",
   "subcategory.unknown": "Unbekannte Unterkategorie",
-  "overview.kpi.monthlyChange.empty": "Noch keine monatlichen Vergleichsdaten verfügbar."
+  "overview.kpi.monthlyChange.empty": "Noch keine monatlichen Vergleichsdaten verfügbar.",
+  "overview.meta.title": "LEGO-Elemente verfolgen | Neueste Statistiken",
+  "overview.meta.description": "Entdecke jährliche LEGO-Element-Trends, monatliche Veränderungen und Verteilungen nach Steintyp."
 }

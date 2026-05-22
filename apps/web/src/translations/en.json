@@ -65,5 +65,7 @@
   "search.results.elements.subcategories": "Categories",
   "search.results.pages": "Pages",
   "subcategory.unknown": "Unknown subcategory",
-  "overview.kpi.monthlyChange.empty": "No monthly comparison data available yet."
+  "overview.kpi.monthlyChange.empty": "No monthly comparison data available yet.",
+  "overview.meta.title": "Track LEGO elements | Latest Statistics",
+  "overview.meta.description": "Explore yearly LEGO element trends, monthly deltas, and piece type breakdowns."
 }

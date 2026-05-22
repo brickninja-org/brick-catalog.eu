@@ -5,6 +5,7 @@ import { Typography } from '@heroui/react/typography';
 import { getTranslations } from 'next-intl/server';
 
 import { PageLayout } from '@/components/layout/PageLayout';
+import { routing } from '@/i18n/routing';
 
 import { AnimatedGrid } from './components/AnimatedGrid';
 import { AnimatedSection } from './components/AnimatedSection';
@@ -13,11 +14,17 @@ import { getOverviewData } from './components/overview-data';
 import { PieceTypeBreakdownChart, YearlyElementsChart } from './components/OverviewBarCharts';
 import { SummaryCard } from './components/SummaryCard';
 
-const SUPPORTED_LANGUAGES: Language[] = ['de', 'en', 'nl'];
+const OVERVIEW_LANGUAGES = routing.locales as readonly Language[];
+
+function resolveOverviewLanguage(value: unknown): Language {
+  return typeof value === 'string' && OVERVIEW_LANGUAGES.includes(value as Language)
+    ? value as Language
+    : routing.defaultLocale;
+}
 
 export default async function OverviewPage({ params }: PageProps<'/[language]'>) {
   const { language: languageParam } = await params;
-  const language = (SUPPORTED_LANGUAGES.includes(languageParam as Language) ? languageParam : 'en') as Language;
+  const language = resolveOverviewLanguage(languageParam);
   const t = await getTranslations({ locale: language });
   const overviewData = await getOverviewData();
   const chartTranslations = {
@@ -90,16 +97,24 @@ export default async function OverviewPage({ params }: PageProps<'/[language]'>)
 }
 
 export function generateStaticParams() {
-  return SUPPORTED_LANGUAGES.map((language) => ({ language }));
+  return OVERVIEW_LANGUAGES.map((language) => ({ language }));
 }
 
-export const metadata: Metadata = {
-  title: 'Track LEGO elements | Latest Statistics',
-  description: 'Explore yearly LEGO element trends, monthly deltas, and piece type breakdowns.',
-  openGraph: {
-    title: 'Track LEGO elements | Latest Statistics',
-    description: 'Explore yearly LEGO element trends, monthly deltas, and piece type breakdowns.',
-    type: 'website',
-    siteName: 'brick-catalog.eu',
-  },
-};
+export async function generateMetadata({ params }: PageProps<'/[language]'>): Promise<Metadata> {
+  const { language: languageParam } = await params;
+  const language = resolveOverviewLanguage(languageParam);
+  const t = await getTranslations({ locale: language });
+  const title = t('overview.meta.title');
+  const description = t('overview.meta.description');
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      siteName: 'brick-catalog.eu',
+    },
+  };
+}

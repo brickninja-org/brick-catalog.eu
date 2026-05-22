@@ -96,5 +96,7 @@
   "search.results.elements.subcategories": "Subcategorieën",
   "search.results.pages": "Pagina's",
   "subcategory.unknown": "Onbekende subcategorie",
-  "overview.kpi.monthlyChange.empty": "Nog geen maandvergelijkingsdata beschikbaar."
+  "overview.kpi.monthlyChange.empty": "Nog geen maandvergelijkingsdata beschikbaar.",
+  "overview.meta.title": "Volg LEGO-elementen | Nieuwste statistieken",
+  "overview.meta.description": "Bekijk jaarlijkse LEGO-elementtrends, maandelijkse veranderingen en verdelingen per steentype."
 }
