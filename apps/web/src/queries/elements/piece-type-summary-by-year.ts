@@ -2,7 +2,7 @@ import { db } from '@/lib/prisma';
 
 import { applyElementsCache, getLatestElementCreatedAt, getYearRange } from './shared';
 
-interface PieceTypeSummaryByYear {
+export interface PieceTypeSummaryByYear {
   year: number,
   total: number,
   lego: number,

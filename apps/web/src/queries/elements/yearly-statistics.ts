@@ -2,7 +2,7 @@ import { db } from '@/lib/prisma';
 
 import { applyElementsCache } from './shared';
 
-interface YearlyTotal {
+export interface YearlyTotal {
   year: number,
   total: number,
 }

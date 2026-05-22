@@ -2,7 +2,7 @@ import { db } from '@/lib/prisma';
 
 import { applyElementsCache, getMonthRange } from './shared';
 
-interface MonthlyComparison {
+export interface MonthlyComparison {
   currentMonth: { total: number },
   previousMonth: { total: number },
 }
