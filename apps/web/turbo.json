@@ -6,8 +6,7 @@
   "tasks": {
     "dev": {
       "dependsOn": [
-        "^build",
-        "@brickcatalog/database#prisma:migrate"
+        "@brickcatalog/database#prisma:generate"
       ]
     },
     "build": {
