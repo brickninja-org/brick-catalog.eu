@@ -7,6 +7,7 @@ import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 
 import { formatMonthLabel, getOverviewLocale } from './formatting';
+import { getMonthlyChangeTrend } from './MonthlyChangeSummary.logic';
 import { OverviewEmptyStateCard } from './OverviewEmptyStateCard';
 
 interface MonthlyChangeSummaryProps {
@@ -36,9 +37,7 @@ export function MonthlyChangeSummary({
   const currentTotal = comparison.currentMonth.total;
   const previousTotal = comparison.previousMonth.total;
 
-  const changeAmount = currentTotal - previousTotal;
-  const changeRatio = previousTotal > 0 ? changeAmount / previousTotal : 0;
-  const trend = changeRatio > 0 ? 'up' : changeRatio < 0 ? 'down' : 'neutral';
+  const { changeAmount, changeRatio, trend } = getMonthlyChangeTrend(currentTotal, previousTotal);
 
   const displayMonth = formatMonthLabel(latestMonth, language);
 

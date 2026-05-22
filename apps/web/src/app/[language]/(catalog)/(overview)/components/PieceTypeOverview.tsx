@@ -1,12 +1,14 @@
+import { Language } from '@brickcatalog/database';
 import { Chip } from '@heroui/react/chip';
 import { Typography } from '@heroui/react/typography';
 import { KPI, KPIGroup } from '@heroui-pro/react';
 
 import { getPieceTypeSummaryByYear } from '@/queries/elements/piece-type-summary-by-year';
 
-import { OVERVIEW_LOCALE } from './formatting';
+import { getOverviewLocale } from './formatting';
 
 export async function PieceTypeOverview() {
+  const locale = getOverviewLocale(Language.en);
   const summary = await getPieceTypeSummaryByYear();
 
   if (!summary) {
@@ -29,7 +31,7 @@ export async function PieceTypeOverview() {
           <KPI.Content>
             <KPI.Value
               className="text-2xl text-accent"
-              locale={OVERVIEW_LOCALE}
+              locale={locale}
               maximumFractionDigits={0}
               value={summary.total}
             />
@@ -43,7 +45,7 @@ export async function PieceTypeOverview() {
           <KPI.Content>
             <KPI.Value
               className="text-2xl text-accent"
-              locale={OVERVIEW_LOCALE}
+              locale={locale}
               maximumFractionDigits={0}
               value={summary.lego}
             />
@@ -57,7 +59,7 @@ export async function PieceTypeOverview() {
           <KPI.Content>
             <KPI.Value
               className="text-2xl text-accent"
-              locale={OVERVIEW_LOCALE}
+              locale={locale}
               maximumFractionDigits={0}
               value={summary.technic}
             />

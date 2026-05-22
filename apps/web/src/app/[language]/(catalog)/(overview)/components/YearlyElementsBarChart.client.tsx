@@ -1,19 +1,33 @@
 'use client';
 
+import type { Language } from '@brickcatalog/database';
+
 import { ArrowUpRight } from '@gravity-ui/icons';
 import { Button } from '@heroui/react/button';
 import { Card } from '@heroui/react/card';
-import { Typography } from '@heroui/react/typography';
 import { BarChart } from '@heroui-pro/react';
 import Link from 'next/link';
 
-import { OVERVIEW_LOCALE } from './formatting';
+import { getOverviewLocale } from './formatting';
 
 interface YearlyElementsBarChartProps {
+  language: Language,
   data: Array<{ year: number, total: number }>,
+  title: string,
+  description: string,
+  openAriaLabel: string,
+  tooltipLabelPrefix: string,
 }
 
-export function YearlyElementsBarChart({ data }: YearlyElementsBarChartProps) {
+export function YearlyElementsBarChart({
+  language,
+  data,
+  title,
+  description,
+  openAriaLabel,
+  tooltipLabelPrefix,
+}: YearlyElementsBarChartProps) {
+  const locale = getOverviewLocale(language);
   const chartData = data.slice(-6).map((item) => ({
     year: String(item.year),
     total: item.total,
@@ -21,20 +35,17 @@ export function YearlyElementsBarChart({ data }: YearlyElementsBarChartProps) {
 
   return (
     <Card>
+      <Card.Header className="mb-1 grid grid-cols-[1fr_auto] items-start gap-x-3 gap-y-1">
+        <Card.Title>{title}</Card.Title>
+        <Link className="row-span-2" href="/element/registrations">
+          <Button isIconOnly aria-label={openAriaLabel} variant="tertiary">
+            <ArrowUpRight className="size-5"/>
+          </Button>
+        </Link>
+        <Card.Description className="text-muted text-xs">{description}</Card.Description>
+      </Card.Header>
       <Card.Content>
-        <div className="mb-5 flex items-center justify-between">
-          <div>
-            <Typography type="h3">Yearly Elements</Typography>
-            <p className="text-muted text-sm">Total registered elements per year</p>
-          </div>
-          <Link href="/element/registrations">
-            <Button isIconOnly aria-label="Open yearly element registrations" variant="tertiary">
-              <ArrowUpRight className="size-5"/>
-            </Button>
-          </Link>
-        </div>
-
-        <BarChart data={chartData} height={164}>
+        <BarChart data={chartData} height={174}>
           <BarChart.Grid strokeDasharray="4 4" vertical={false}/>
           <BarChart.XAxis axisLine={false} dataKey="year" tickLine={false}/>
           <BarChart.YAxis allowDecimals={false} axisLine={false} tickLine={false}/>
@@ -42,8 +53,8 @@ export function YearlyElementsBarChart({ data }: YearlyElementsBarChartProps) {
           <BarChart.Tooltip
             content={(
               <BarChart.TooltipContent
-                labelFormatter={(label) => `Year ${label}`}
-                valueFormatter={(value) => Number(value).toLocaleString(OVERVIEW_LOCALE)}
+                labelFormatter={(label) => `${tooltipLabelPrefix} ${label}`}
+                valueFormatter={(value) => Number(value).toLocaleString(locale)}
               />
             )}
           />
