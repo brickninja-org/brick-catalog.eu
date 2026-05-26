@@ -1,0 +1,29 @@
+{
+  "name": "@brickcatalog/ai",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-powered blog content generation for brick-catalog.eu",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "scripts": {
+    "health:posts": "tsx health-check-posts.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/gateway": "catalog:",
+    "@ai-sdk/google": "catalog:",
+    "@brickcatalog/database": "workspace:*",
+    "@opentelemetry/sdk-trace-node": "2.7.1",
+    "@vercel/blob": "2.3.3",
+    "ai": "catalog:",
+    "zod": "catalog:",
+    "@brickninja-org/helper": "workspace:*",
+    "@brickninja-org/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@brickninja-org/standard": "workspace:*",
+    "eslint": "9.39.4",
+    "tsx": "^4.20.3",
+    "typescript": "5.9.3"
+  }
+}
