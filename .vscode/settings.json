@@ -1,11 +1,19 @@
 {
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "eslint.workingDirectories": [
+    { "mode": "auto" }
+  ],
   "files.associations": {
     "**/packages/standard/eslint/*.json": "jsonc",
     "*.css": "tailwindcss"
   },
-  "eslint.workingDirectories": [
-    { "mode": "auto" }
-  ],
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "css": "css",
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"],
+  ]
 }
