@@ -12,7 +12,8 @@
     "build": {
       "outputs": [
         ".next/**",
-        "!.next/cache/**"
+        "!.next/cache/**",
+        "src/app/.well-known/workflow/**"
       ],
       "env": ["SKIP_TYPES", "DEPLOYMENT_ID"]
     }

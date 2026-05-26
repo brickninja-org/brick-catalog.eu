@@ -11,16 +11,15 @@ import {
   Select,
   Surface
 } from '@heroui/react';
+import { useLocale } from 'next-intl';
 import { useMemo } from 'react';
 
-import { useLanguage } from '../i18n/I18n.context';
-
-import { useFormatContext } from './Format.context';
+import { useFormat } from './Format.context';
 import { FormatCurrency } from './FormatCurrency';
 import { FormatDate } from './FormatDate';
 import { FormatNumber } from './FormatNumber';
-import { FormatWeight } from './FormatWeight';
 import { getFormatPreview, getLanguageOptions, getRegionOptions, isSupportedLanguage } from './formatting';
+import { FormatWeight } from './FormatWeight';
 
 export interface FormatPreferencesModalProps {
   onOpenChange?: (isOpen: boolean) => void,
@@ -33,8 +32,8 @@ export function FormatPreferencesModal({
   state,
   trigger,
 }: FormatPreferencesModalProps) {
-  const currentLanguage = useLanguage();
-  const { locale, language, region, setLocale, defaultRegion } = useFormatContext();
+  const currentLanguage = useLocale();
+  const { locale, language, region, setLocale, defaultRegion } = useFormat();
 
   const languageOptions = useMemo(
     () => getLanguageOptions(currentLanguage),

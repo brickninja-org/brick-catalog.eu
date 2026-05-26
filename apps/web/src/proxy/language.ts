@@ -6,15 +6,22 @@ import Negotiator from 'negotiator';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { SESSION_COOKIE_NAME } from '@/lib/auth/cookie';
-import { createRememberLanguageCookie, rememberLanguageCookieName } from '@/lib/cookie';
+import { createRememberLanguageCookie, REMEMBER_LANGUAGE_COOKIE_NAME } from '@/lib/cookie';
 import { getBaseUrl } from '@/lib/url';
 
 export const languageProxy: ProxyHandler = async (request, next, context) => {
   const url = context.url;
   const subdomain = context.subdomain;
+  const isWorkflowInternalRoute = request.nextUrl.pathname.startsWith('/.well-known/workflow/');
 
   if (!url) {
     return new NextResponse('Internal Server Error', { status: 500 });
+  }
+
+  // Workflow runtime callbacks must stay on root paths and should not be redirected by locale logic.
+  if (isWorkflowInternalRoute) {
+    request.headers.set('x-bc-lang', 'en');
+    return next(request);
   }
 
   // get remembered language from cookie
@@ -68,7 +75,7 @@ export const languageProxy: ProxyHandler = async (request, next, context) => {
 };
 
 function getLanguageFromCookie(request: NextRequest): Language | undefined {
-  const language = request.cookies.get(rememberLanguageCookieName);
+  const language = request.cookies.get(REMEMBER_LANGUAGE_COOKIE_NAME);
 
   if(language?.value && language.value in Language) {
     return language.value as Language;

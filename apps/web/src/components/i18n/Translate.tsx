@@ -1,19 +1,15 @@
-import 'server-only';
-
-import type { TranslationId } from '@/lib/translate';
-import type { Language } from '@brickcatalog/database';
+import type { TranslationId } from '@/i18n/types';
 import type { FC } from 'react';
 
-import { getLanguage, translate } from '@/lib/translate';
+import { useTranslations } from 'next-intl';
 
 export interface TranslateProps {
   id: TranslationId,
-  language?: Language,
 }
 
-export const Translate: FC<TranslateProps> = async ({ id, language }) => {
-  language ??= await getLanguage();
-  const translation = translate(id, language);
+export const Translate: FC<TranslateProps> = ({ id }) => {
+  const t = useTranslations();
+  const translation = t(id);
 
   return <>{translation}</>;
 };

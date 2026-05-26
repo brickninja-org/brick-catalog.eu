@@ -1,6 +1,16 @@
-export const OVERVIEW_LOCALE = 'en-DE';
+import type { Language } from '@brickcatalog/database';
 
-export function formatMonthLabel(month: string): string {
+const OVERVIEW_LOCALES: Record<Language, string> = {
+  de: 'de-DE',
+  en: 'en-US',
+  nl: 'nl-NL',
+};
+
+export function getOverviewLocale(language: Language): string {
+  return OVERVIEW_LOCALES[language] ?? OVERVIEW_LOCALES.en;
+}
+
+export function formatMonthLabel(month: string, language: Language): string {
   const [yearPart, monthPart] = month.split('-');
   const year = Number(yearPart);
   const monthIndex = Number(monthPart) - 1;
@@ -9,7 +19,7 @@ export function formatMonthLabel(month: string): string {
     return month;
   }
 
-  return new Date(Date.UTC(year, monthIndex, 1)).toLocaleString(OVERVIEW_LOCALE, {
+  return new Date(Date.UTC(year, monthIndex, 1)).toLocaleString(getOverviewLocale(language), {
     month: 'short',
     timeZone: 'UTC',
     year: 'numeric',

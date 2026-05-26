@@ -4,7 +4,7 @@ import type { FC } from 'react';
 
 import { Tooltip } from '@heroui/react';
 
-import { useFormatContext } from './Format.context';
+import { useFormat } from './Format.context';
 import { getRelativeDateDifference, isValidDate } from './FormatDate.logic';
 
 export interface FormatDateProps {
@@ -13,7 +13,7 @@ export interface FormatDateProps {
 }
 
 export const FormatDate: FC<FormatDateProps> = ({ date = null, relative = false }) => {
-  const { relativeFormat, localFormat } = useFormatContext();
+  const { relativeFormat, localFormat } = useFormat();
   const difference = isValidDate(date) && relative ? getRelativeDateDifference(date) : undefined;
 
   if (!isValidDate(date)) {

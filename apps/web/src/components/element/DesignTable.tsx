@@ -148,7 +148,7 @@ export const DesignTable: FC<DesignTableProps> = ({
             {({ pieceType }) => pieceType}
           </Designs.Column>
           <Designs.Column header="Weight" id="weight" title="Weight">
-            {({ weight }) => (weight != null ? <FormatWeight weight={weight} unit="auto"/> : '?')}
+            {({ weight }) => (weight != null ? <FormatWeight unit="auto" weight={weight}/> : '?')}
           </Designs.Column>
         </Designs.Table>
       </div>

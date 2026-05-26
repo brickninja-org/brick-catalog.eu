@@ -2,9 +2,16 @@
 
 import type { FC, ReactNode } from 'react';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useLocale } from 'next-intl';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import { useLanguage } from '../i18n/I18n.context';
 import { resolveLocale } from './FormatContext.logic';
 
 type FormatLanguage = string | 'auto';
@@ -69,7 +76,7 @@ interface FormatContextProps {
 
 const FormatContext = createContext<FormatContextProps>(null!);
 
-export function useFormatContext() {
+export function useFormat() {
   return useContext(FormatContext);
 }
 
@@ -78,7 +85,7 @@ export interface FormatProviderProps {
 }
 
 export const FormatProvider: FC<FormatProviderProps> = ({ children }) => {
-  const currentLanguage = useLanguage();
+  const currentLanguage = useLocale();
   const [region, setRegion] = useState<FormatRegion>(getStoredRegion);
   const [language, setLanguage] = useState<FormatLanguage>(getStoredLanguage);
 

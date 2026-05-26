@@ -1,6 +1,5 @@
 'use client';
 
-import type { TranslationSubset } from '@/lib/translate';
 import type { Language } from '@brickcatalog/database';
 import type { Key, Selection } from '@heroui/react';
 import type { FC } from 'react';
@@ -9,9 +8,9 @@ import { Language as LanguageEnum } from '@brickcatalog/database';
 import { Gear, Globe } from '@gravity-ui/icons';
 import { Dropdown, Label, useOverlayState } from '@heroui/react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 
-import { FormatPreferencesModal } from '@/components/format/FormatPreferencesModal';
-import { useLanguage } from '@/components/i18n/I18n.context';
+import { FormatPreferencesModal } from '@/components/format';
 import { localizedUrl } from '@/lib/localized-url';
 
 const languages = Object.values(LanguageEnum);
@@ -22,14 +21,10 @@ const languageLabels: Record<Language, string> = {
   nl: 'Nederlands',
 };
 
-export interface LanguageSwitcherProps {
-  translations: TranslationSubset<
-    | 'locale.formatting-settings.label'
-  >,
-}
-
-export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ translations }) => {
-  const currentLanguage = useLanguage();
+export const LanguageSwitcher: FC = () => {
+  const t = useTranslations();
+  const locale = useLocale();
+  const currentLanguage = locale as Language;
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.toString();
@@ -95,7 +90,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ translations }) =>
 
               <Dropdown.Item onPress={formattingDialog.open}>
                 <Gear/>
-                <Label>{translations['locale.formatting-settings.label']}</Label>
+                <Label>{t('locale.formatting-settings.label')}</Label>
               </Dropdown.Item>
             </Dropdown.Section>
           </Dropdown.Menu>

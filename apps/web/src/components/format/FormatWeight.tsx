@@ -1,14 +1,14 @@
 'use client';
 
+import type { FormatWeightUnit } from './FormatWeight.logic';
 import type { FC } from 'react';
 
-import { useFormatContext } from './Format.context';
+import { useFormat } from './Format.context';
 import { FormatNumber } from './FormatNumber';
 import {
   getWeightDisplay,
   resolveAutoWeightUnit
 } from './FormatWeight.logic';
-import type { FormatWeightUnit } from './FormatWeight.logic';
 
 export interface FormatWeightProps {
   // Always provide weight in grams.
@@ -17,7 +17,7 @@ export interface FormatWeightProps {
 }
 
 export const FormatWeight: FC<FormatWeightProps> = ({ weight, unit = 'auto' }) => {
-  const { region } = useFormatContext();
+  const { region } = useFormat();
 
   if (!Number.isFinite(weight)) {
     return <FormatNumber value={null}/>;
