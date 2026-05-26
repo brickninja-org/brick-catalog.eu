@@ -6,16 +6,19 @@
     "dev:web": "PNPM_VERIFY_DEPS_BEFORE_RUN=false FORCE_COLOR=1 turbo run dev --filter=web",
     "dev:worker": "PNPM_VERIFY_DEPS_BEFORE_RUN=false FORCE_COLOR=1 turbo run dev --filter=worker",
     "lint": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run lint --continue -- -f gha",
+    "biome:check": "pnpm exec biome check .",
+    "biome:fix": "pnpm exec biome check --write .",
     "prisma:studio": "PNPM_VERIFY_DEPS_BEFORE_RUN=false pnpm run --filter @brickcatalog/database prisma:studio",
     "prisma:migrate-dev": "PNPM_VERIFY_DEPS_BEFORE_RUN=false pnpm run --filter @brickcatalog/database prisma:migrate-dev",
     "e2e": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run e2e",
     "test": "PNPM_VERIFY_DEPS_BEFORE_RUN=false turbo run test"
   },
   "devDependencies": {
-    "@brickninja/standard": "workspace:*",
+    "@brickninja-org/standard": "workspace:*",
     "@eslint/js": "9.39.4",
     "@next/eslint-plugin-next": "16.2.1",
     "@stylistic/eslint-plugin": "5.10.0",
+    "@biomejs/biome": "^1.9.4",
     "@types/node": "24.12.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.1",
@@ -24,7 +27,7 @@
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.0.1",
     "globals": "17.4.0",
-    "turbo": "2.8.20",
+    "turbo": "2.9.14",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.1"
   },
@@ -42,11 +45,14 @@
       "@types/react-dom": "19.2.3"
     },
     "onlyBuiltDependencies": [
+      "@heroui-pro/react",
       "@prisma/client",
       "@prisma/engines",
       "esbuild",
+      "heroui-pro",
       "prisma",
-      "sharp"
+      "sharp",
+      "heroui-native-pro"
     ]
   },
   "packageManager": "pnpm@10.32.1"
