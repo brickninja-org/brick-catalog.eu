@@ -60,6 +60,11 @@ Optional month override:
 BLOG_HEALTH_MONTH=2026-05 pnpm -C packages/ai run health:posts
 ```
 
+Expected result:
+- each dataType returns a published post id + slug
+- embedding upsert succeeds for every post
+- content sanity checks remain false for escaped newline artifacts
+
 ## Editorial Style Guide
 
 Use these rules for generated LEGO catalog posts:
