@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "@brickcatalog/database": "workspace:*",
+    "@brickninja-org/helper": "workspace:*",
+    "@brickninjaapi/fetch": "2.0.0",
     "cron-parser": "5.5.0",
     "sharp": "0.34.5"
   },
   "devDependencies": {
-    "@brickninja/standard": "workspace:*",
-    "@types/node": "24.12.0",
+    "@brickninja-org/standard": "workspace:*",
+    "@brickninjaapi/types": "0.3.0",
+    "@types/node": "24.12.2",
     "@vercel/ncc": "0.38.4"
   }
 }

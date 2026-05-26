@@ -1,4 +1,4 @@
-import nodeConfig from '@brickninja/standard/eslint/node.mjs';
+import nodeConfig from '@brickninja-org/standard/eslint/node.mjs';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig(
