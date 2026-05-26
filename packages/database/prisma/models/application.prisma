@@ -1,0 +1,19 @@
+model Application {
+  id        String                  @id @default(uuid())
+  name      String
+  apiKey    String                  @unique
+  origins   String[]
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+  requests  ApplicationApiRequest[]
+}
+
+model ApplicationApiRequest {
+  requestId     String
+  timestamp     DateTime    @default(now())
+  applicationId String
+  endpoint      String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([requestId, timestamp, applicationId, endpoint])
+}

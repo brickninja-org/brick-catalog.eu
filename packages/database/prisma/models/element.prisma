@@ -1,0 +1,194 @@
+model Element {
+  id Int @id
+
+  name String
+
+  icon Icon? @relation(fields: [iconId], references: [id])
+  iconId Int?
+
+  color   Color? @relation(fields: [colorId], references: [id])
+  colorId Int?
+
+  design   Design? @relation(fields: [designId], references: [id])
+  designId Int?
+
+  item Item? @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int? @unique
+
+  removedFromApi Boolean @default(false)
+
+  lastCheckedAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  current   Revision         @relation("current", fields: [currentId], references: [id])
+  currentId String           @unique
+  history   ElementHistory[]
+
+  version Int @default(0)
+
+  @@index([designId, colorId])
+  @@index([designId])
+  @@index([colorId])
+  @@index([removedFromApi, lastCheckedAt])
+  @@index([version])
+}
+
+model ElementHistory {
+  elementId  Int
+  revisionId String
+  element    Element  @relation(fields: [elementId], references: [id], onDelete: Cascade)
+  revision   Revision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+
+  @@id([elementId, revisionId])
+}
+
+model Color {
+  id Int @id
+
+  name          String
+  family        ColorFamily
+  pieceColor    String
+  contrastColor String
+
+  removedFromApi Boolean        @default(false)
+  currentId      String         @unique
+  lastCheckedAt  DateTime       @default(now())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  version        Int            @default(0)
+  elementIds     Int[]
+  current        Revision       @relation("current", fields: [currentId], references: [id])
+  history        ColorHistory[]
+  elements       Element[]
+
+  @@index([name])
+  @@index([removedFromApi, lastCheckedAt])
+  @@index([version])
+}
+
+model ColorHistory {
+  colorId    Int
+  revisionId String
+  color      Color    @relation(fields: [colorId], references: [id], onDelete: Cascade)
+  revision   Revision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+
+  @@id([colorId, revisionId])
+}
+
+model Design {
+  id             Int             @id
+  name           String
+  pieceType      PieceType       @default(LEGO)
+  weight         Float?
+  studDimensions String?
+  subcategoryId  Int?            @map("categoryId")
+  removedFromApi Boolean         @default(false)
+  currentId      String          @unique
+  lastCheckedAt  DateTime        @default(now())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  version        Int             @default(0)
+  subcategory    Subcategory?    @relation("designs", fields: [subcategoryId], references: [id])
+  current        Revision        @relation("current", fields: [currentId], references: [id])
+  history        DesignHistory[]
+  elementIds     Int[]
+  elements       Element[]
+
+  @@index([subcategoryId])
+  @@index([name])
+  @@index([pieceType])
+  @@index([removedFromApi, lastCheckedAt])
+  @@index([version])
+}
+
+model DesignHistory {
+  designId   Int
+  revisionId String
+  design     Design   @relation(fields: [designId], references: [id], onDelete: Cascade)
+  revision   Revision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+
+  @@id([designId, revisionId])
+}
+
+model Category {
+  id             Int               @id
+  name           String
+  subcategoryIds Int[]             @map("categoryIds")
+  removedFromApi Boolean           @default(false)
+  currentId      String            @unique
+  lastCheckedAt  DateTime          @default(now())
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  version        Int               @default(0)
+  subcategories  Subcategory[]
+  current        Revision          @relation("current", fields: [currentId], references: [id])
+  history        CategoryHistory[]
+
+  @@index([removedFromApi, lastCheckedAt])
+  @@index([version])
+  @@map("Group")
+}
+
+model CategoryHistory {
+  categoryId      Int      @map("groupId")
+  revisionId      String
+  elementCategory Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  revision        Revision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+
+  @@id([categoryId, revisionId])
+  @@map("GroupHistory")
+}
+
+model Subcategory {
+  id             Int                  @id
+  name           String
+  categoryId     Int?                 @map("groupId")
+  removedFromApi Boolean              @default(false)
+  currentId      String               @unique
+  lastCheckedAt  DateTime             @default(now())
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  version        Int                  @default(0)
+  current        Revision             @relation("current", fields: [currentId], references: [id])
+  category       Category?            @relation(fields: [categoryId], references: [id])
+  history        SubcategoryHistory[]
+  designs        Design[]             @relation("designs")
+
+  @@index([categoryId])
+  @@index([removedFromApi, lastCheckedAt])
+  @@index([version])
+  @@map("Category")
+}
+
+model SubcategoryHistory {
+  subcategoryId Int         @map("categoryId")
+  revisionId    String
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  revision      Revision    @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+
+  @@id([subcategoryId, revisionId])
+  @@map("CategoryHistory")
+}
+
+enum ColorFamily {
+  Black
+  Blue
+  Brown
+  Green
+  Grey
+  Lilac
+  Metallic
+  Multicombination
+  Orange
+  Purple
+  Red
+  White
+  Yellow
+}
+
+enum PieceType {
+  DUPLO
+  LEGO
+  TECHNIC
+}

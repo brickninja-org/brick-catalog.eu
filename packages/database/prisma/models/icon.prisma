@@ -1,0 +1,8 @@
+model Icon {
+    id Int @id
+    signature String
+
+    color String
+
+    elements Element[]
+}
