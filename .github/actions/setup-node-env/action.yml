@@ -27,6 +27,8 @@ runs:
         registry-url: 'https://registry.npmjs.org'
     - name: Install dependencies
       shell: bash
+      env:
+        HEROUI_AUTH_TOKEN: ${{ env.HEROUI_AUTH_TOKEN }}
       run: pnpm install --frozen-lockfile
     - name: Cache turbo
       if: inputs.cache-key != 'false'

@@ -19,6 +19,8 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Setup Node.js env
       uses: ./.github/actions/setup-node-env
+      env:
+        HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
       with:
         node-version: ${{ env[format('NODE_{0}_VERSION', matrix.node)] }}
         cache-key: build

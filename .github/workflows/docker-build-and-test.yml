@@ -47,6 +47,8 @@ jobs:
             ./docker-compose.yml
             ${{ steps.meta.outputs.bake-file-labels }}
           targets: ${{ matrix.target }}
+          secrets: |
+            HEROUI_AUTH_TOKEN=${{ secrets.HEROUI_AUTH_TOKEN }}
           set: |
             ${{ matrix.target }}.output=type=image,push-by-digest=true,name-canonical=true,push=true
             ${{ matrix.target }}.tags=${{ env.IMAGE_ID }}

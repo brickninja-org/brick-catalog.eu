@@ -37,7 +37,10 @@ WORKDIR /app
 COPY --link --from=source /source/out/json/ .
 
 # install dev dependencies
-RUN npm i -g pnpm@${pnpm_version} && pnpm install --frozen-lockfile
+RUN --mount=type=secret,id=HEROUI_AUTH_TOKEN \
+  export HEROUI_AUTH_TOKEN="$(cat /run/secrets/HEROUI_AUTH_TOKEN 2>/dev/null || true)" \
+  && npm i -g pnpm@${pnpm_version} \
+  && pnpm install --frozen-lockfile
 
 # add source
 COPY --link --from=source /source/out/full/ .
