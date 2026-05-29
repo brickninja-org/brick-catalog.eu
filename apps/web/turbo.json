@@ -6,14 +6,14 @@
   "tasks": {
     "dev": {
       "dependsOn": [
-        "^build",
-        "@brickcatalog/database#prisma:migrate"
+        "@brickcatalog/database#prisma:generate"
       ]
     },
     "build": {
       "outputs": [
         ".next/**",
-        "!.next/cache/**"
+        "!.next/cache/**",
+        "src/app/.well-known/workflow/**"
       ],
       "env": ["SKIP_TYPES", "DEPLOYMENT_ID"]
     }

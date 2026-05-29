@@ -1,8 +1,8 @@
-import baseNextConfig from '@brickninja/standard/eslint/next.mjs';
+import baseNextConfig from '@brickninja-org/standard/eslint/next.mjs';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
-const eslintConfig = defineConfig([
-  ...baseNextConfig,
+const config = defineConfig(
+  baseNextConfig,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -11,6 +11,6 @@ const eslintConfig = defineConfig([
     'build/**',
     'next-env.d.ts',
   ]),
-]);
+);
 
-export default eslintConfig;
+export default config;

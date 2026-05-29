@@ -1,0 +1,43 @@
+model Build {
+  id        String     @id
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  revisions Revision[]
+}
+
+model Revision {
+  id                 String               @id @default(uuid())
+  entity             String?
+  schema             String
+  data               String
+  hash               String               @default("")
+  description        String?
+  type               RevisionType         @default(Updated)
+  language           Language
+  buildId            String
+  createdAt          DateTime             @default(now())
+  previousRevisionId String?              @unique
+  currentSubcategory Subcategory?         @relation("current")
+  subcategoryHistory SubcategoryHistory[]
+  currentColor       Color?               @relation("current")
+  colorHistory       ColorHistory[]
+  currentDesign      Design?              @relation("current")
+  designHistory      DesignHistory[]
+  currentElement     Element?             @relation("current")
+  elementHistory     ElementHistory[]
+  categories         Category?            @relation("current")
+  categoryHistories  CategoryHistory[]
+  build              Build                @relation(fields: [buildId], references: [id])
+  previousRevision   Revision?            @relation("previous", fields: [previousRevisionId], references: [id])
+  nextRevision       Revision?            @relation("previous")
+
+  @@index([hash], type: Hash)
+  @@index([language, type, entity, createdAt(sort: Desc)])
+}
+
+enum RevisionType {
+  Updated
+  Import
+  Added
+  Removed
+}

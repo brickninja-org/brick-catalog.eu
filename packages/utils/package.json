@@ -1,0 +1,53 @@
+{
+  "name": "@brickninja-org/utils",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "brick.ninja utility library",
+  "exports": {
+    ".": {
+      "types": "./dist/slugify.d.ts",
+      "default": "./dist/slugify.js"
+    },
+    "./slugify": {
+      "types": "./dist/slugify.d.ts",
+      "default": "./dist/slugify.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "build": "pnpm run clean && if test $CI; then pnpm run build:ci; else pnpm run build:local; fi",
+    "build:local": "tsc --declarationMap",
+    "build:ci": "tsc",
+    "clean": "rm -rf dist/",
+    "lint": "eslint .",
+    "publish-package": "brickninja-publish-package"
+  },
+  "keywords": [
+    "brickninja",
+    "utils"
+  ],
+  "files": [
+    "dist/"
+  ],
+  "author": "@brickninja-pro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brickninja-org/brick-catalog.eu/issues"
+  },
+  "homepage": "https://github.com/brickninja-org/brick-catalog.eu#readme",
+  "dependencies": {
+    "@sindresorhus/slugify": "3.0.0"
+  },
+  "devDependencies": {
+    "@brickninja-org/standard": "workspace:*",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

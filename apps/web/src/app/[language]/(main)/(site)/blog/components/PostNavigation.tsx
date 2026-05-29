@@ -1,0 +1,80 @@
+import type { Post } from '@brickcatalog/database';
+
+import { Link } from '@heroui/react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+
+interface PostNavigationProps {
+  previous?: Post,
+  next?: Post,
+}
+
+export function PostNavigation({ previous, next }: PostNavigationProps) {
+  if (!previous && !next) {
+    return null;
+  }
+
+  return (
+    <nav
+      aria-label="Post navigation"
+      className="border-foreground/10 border-t pt-12"
+    >
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        {/* Previous Post */}
+        <div className="group">
+          {previous ? (
+            <Link
+              className="flex h-full flex-col no-underline md:items-start"
+              href={`/blog/${previous.slug}`}
+            >
+              {/* Direction Label */}
+              <div className="mb-3 flex items-center gap-2">
+                <ArrowLeft className="size-4 translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:-translate-x-1 group-hover:text-accent" />
+                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-accent">
+                  Previous
+                </span>
+              </div>
+
+              {/* Title */}
+              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-accent md:text-xl">
+                {previous.title}
+              </h3>
+
+              {/* Animated underline */}
+              <div className="mt-4 h-px w-0 bg-accent transition-all duration-500 ease-out group-hover:w-16" />
+            </Link>
+          ) : (
+            <div className="hidden md:block" />
+          )}
+        </div>
+
+        {/* Next Post */}
+        <div className="group md:text-right">
+          {next ? (
+            <Link
+              className="flex h-full flex-col no-underline md:items-end"
+              href={`/blog/${next.slug}`}
+            >
+              {/* Direction Label */}
+              <div className="mb-3 flex items-center gap-2">
+                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-accent">
+                  Next
+                </span>
+                <ArrowRight className="size-4 translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:text-accent" />
+              </div>
+
+              {/* Title */}
+              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-accent md:text-xl">
+                {next.title}
+              </h3>
+
+              {/* Animated underline */}
+              <div className="mt-4 h-px w-0 bg-accent transition-all duration-500 ease-out group-hover:w-16 md:ml-auto" />
+            </Link>
+          ) : (
+            <div className="hidden md:block" />
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}

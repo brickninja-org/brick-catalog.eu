@@ -1,0 +1,36 @@
+import type { ProcessEntitiesData } from '../helper/process-entities';
+import type { JobDefinition } from '../job-definition';
+
+import { isEmptyObject } from '@brickninja-org/helper/is';
+
+import { db } from '../../db';
+import { loadEntities } from '../helper/entity';
+import { fetchApi } from '../helper/fetch-api';
+import { createSubJobs, processEntities } from '../helper/process-entities';
+
+export const DesignJob: JobDefinition = {
+  run(payload: ProcessEntitiesData<number> | Record<string, never>) {
+    const CURRENT_VERSION = 0;
+
+    if (isEmptyObject(payload)) {
+      return createSubJobs(
+        'designs',
+        () => fetchApi('/v1/elements/designs'),
+        db.design.findMany,
+        CURRENT_VERSION,
+      );
+    }
+
+    processEntities(
+      payload,
+      'Design',
+      (ids) => loadEntities('/v1/elements/designs', ids),
+      (designId, revisionId) => ({ designId_revisionId: { revisionId, designId }}),
+      (design) => {
+        return {
+          name: design.name,
+        };
+      },
+    );
+  },
+};

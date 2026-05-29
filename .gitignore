@@ -1,3 +1,86 @@
-.docker
-node_modules
+# Dependencies
+**/node_modules/
+**/.pnp
+**/.pnp.js
+**/.yarn/
+
+# Build outputs
+**/dist/
+**/.next/
+**/out/
+**/.build/
+**/.open-next/
+
+# Environment files
+.env*
+!.env.example
+
+# Logs
+**/*debug.log*
+**/*error.log*
+
+# Testing & Coverage
+**/coverage/
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/playwright/.cache/
+
+# Cache & Temp
+**/.turbo/
+**/.vercel/
+**/.DS_Store
+**/*.pem
+**/*.tsbuildinfo
+
+# Framework files
+**/next-env.d.ts
+
+# Changesets
+.changeset/pre.json
+
+# Claude
+**/.claude/*
+!**/.claude/agents/
+!**/.claude/skills/
+!**/.claude/commands/
+!**/.claude/settings.json
+
+# Turborepo
 .turbo
+
+# Skills
+.agents/
+
+# Agent platform directories
+.adal/
+.augment/
+.bob/
+.codebuddy/
+.commandcode/
+.continue/
+.cortex/
+.crush/
+.cursor/
+.factory/
+.gemini/
+.goose/
+.iflow/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.opencode/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/

@@ -1,0 +1,51 @@
+model Item {
+  id             Int             @id
+  type           ItemType
+  name           String?
+  element        Element?
+  inventories    Inventory[]     @relation("InventoryOwner")
+  inventoryItems InventoryItem[] @relation("InventoryComponent")
+
+  @@index([type])
+}
+
+model Inventory {
+  id          String          @id @default(uuid())
+  ownerItemId Int
+  type        InventoryType
+  isCurrent   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  owner       Item            @relation("InventoryOwner", fields: [ownerItemId], references: [id], onDelete: Cascade)
+  items       InventoryItem[]
+
+  @@index([ownerItemId])
+  @@index([type])
+  @@index([isCurrent])
+}
+
+model InventoryItem {
+  inventoryId String
+  itemId      Int
+  quantity    Int
+  isSpare     Boolean   @default(false)
+  inventory   Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  item        Item      @relation("InventoryComponent", fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@id([inventoryId, itemId, isSpare])
+  @@index([itemId])
+}
+
+enum ItemType {
+  ELEMENT
+  SET
+  INSTRUCTION
+  BAG
+}
+
+enum InventoryType {
+  SET_CONTENTS
+  BAG_CONTENTS
+  INSTRUCTION_REFERENCE
+  OTHER
+}

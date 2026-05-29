@@ -7,19 +7,32 @@ import CronExpressionParser from 'cron-parser';
 
 import { db } from '../db';
 
-import { toId } from './jobs/helper/toId';
+import { toId } from './helper/toId';
 
 const cronSchedules = {
-  daily: 'H H * * *',
-  hourly: 'H * * * *',
-  every5Minutes: 'H/5 * * * *',
-  every10Minutes: 'H/10 * * * *',
+  daily: '0 0 * * *',
+  hourly: '0 * * * *',
+  every5Minutes: '*/5 * * * *',
+  every5MinutesOffset2: '2-59/5 * * * *',
+  every5MinutesOffset3: '3-59/5 * * * *',
+  every5MinutesOffset4: '4-59/5 * * * *',
 } as const;
 
 export async function registerCronJobs() {
   console.log('Registering cron jobs...');
 
   await registerCronJob('system.test-run', '0 0 * * *');
+
+  // Run jobs without relations first.
+  await registerCronJob('elements', cronSchedules.every5Minutes);
+
+  // Run jobs with relations afterwards in dependency order.
+  await registerCronJob('elements.designs', cronSchedules.every5MinutesOffset2);
+  await registerCronJob('elements.colors', cronSchedules.every5MinutesOffset2);
+  await registerCronJob('elements.subcategories', cronSchedules.every5MinutesOffset3);
+  await registerCronJob('elements.categories', cronSchedules.every5MinutesOffset4);
+
+
   await registerCronJob('jobs.cleanup', cronSchedules.hourly);
 }
 

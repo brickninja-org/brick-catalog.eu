@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 320" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="fade" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="42%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03"/>
+    </linearGradient>
+
+    <radialGradient id="bloom" cx="20%" cy="18%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.26"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M0 0H64M0 0V64" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+
+    <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence baseFrequency="0.9" numOctaves="2" seed="17" type="fractalNoise"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0"/>
+    </filter>
+  </defs>
+
+  <rect width="2048" height="320" fill="url(#fade)"/>
+  <rect width="2048" height="320" fill="url(#bloom)"/>
+  <rect width="2048" height="320" fill="url(#grid)"/>
+
+  <path d="M-120 255C170 140 470 300 790 188C1030 102 1280 208 1560 130C1780 68 1930 92 2190 32V320H-120Z" fill="#ffffff" fill-opacity="0.08"/>
+  <path d="M-180 320C90 188 410 325 730 248C990 186 1240 258 1510 204C1760 156 1950 183 2210 120V320Z" fill="#ffffff" fill-opacity="0.06"/>
+  <rect width="2048" height="320" filter="url(#grain)" opacity="0.55"/>
+</svg>

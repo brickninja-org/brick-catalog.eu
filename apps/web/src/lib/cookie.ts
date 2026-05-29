@@ -3,13 +3,13 @@ import type { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
 import { expiresAtFromExpiresIn } from './expires-at-from-expires-in';
 
-export const rememberLanguageCookieName = 'bc-lang';
+export const REMEMBER_LANGUAGE_COOKIE_NAME = 'bc-lang';
 
 export function createRememberLanguageCookie(language: Language) {
   const baseDomain = new URL(process.env.BC_URL || document.documentElement.dataset.baseUrl!).hostname;
 
   return {
-    name: rememberLanguageCookieName,
+    name: REMEMBER_LANGUAGE_COOKIE_NAME,
     value: language,
     domain: baseDomain,
     path: '/',
