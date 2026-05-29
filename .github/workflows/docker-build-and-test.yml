@@ -38,28 +38,8 @@ jobs:
         with:
           images: ${{ env.IMAGE_ID }}
           bake-target: ${{ matrix.target }}
-      - name: Build the Docker image (web)
-        if: matrix.target == 'web'
-        id: build-web
-        uses: docker/bake-action@82490499d2e5613fcead7e128237ef0b0ea210f7 # v7.0.0
-        with:
-          source: .
-          files: |
-            ./docker-compose.yml
-            ${{ steps.meta.outputs.bake-file-labels }}
-          targets: ${{ matrix.target }}
-          secrets: |
-            HEROUI_AUTH_TOKEN=${{ secrets.HEROUI_AUTH_TOKEN }}
-          set: |
-            ${{ matrix.target }}.output=type=image,push-by-digest=true,name-canonical=true,push=true
-            ${{ matrix.target }}.tags=${{ env.IMAGE_ID }}
-            ${{ matrix.target }}.args.deployment_id=${{ github.run_id }}
-            *.platform=linux/${{ inputs.platform }}
-            *.cache-from=type=gha,scope=build-${{ inputs.platform }}-${{ matrix.target }}
-            *.cache-to=type=gha,scope=build-${{ inputs.platform }}-${{ matrix.target }},mode=max,ignore-error=true
-      - name: Build the Docker image (non-web)
-        if: matrix.target != 'web'
-        id: build-nonweb
+      - name: Build the Docker image
+        id: build
         uses: docker/bake-action@82490499d2e5613fcead7e128237ef0b0ea210f7 # v7.0.0
         with:
           source: .
@@ -78,7 +58,7 @@ jobs:
         run: |
           mkdir -p /tmp/digests/${{ matrix.target }}
           digest=$(jq -cr '."${{ matrix.target }}"."containerimage.digest"' << 'EOF'
-          ${{ steps.build-web.outputs.metadata || steps.build-nonweb.outputs.metadata }}
+          ${{ steps.build.outputs.metadata }}
           EOF
           )
           touch "/tmp/digests/${{ matrix.target }}/${digest#sha256:}"
