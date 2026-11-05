@@ -19,8 +19,8 @@ runs:
       shell: bash
       run: sudo ethtool -K eth0 tx off rx off
     - name: Install pnpm
-      uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-    - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+      uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
       with:
         node-version: ${{ inputs.node-version }}
         cache: pnpm
@@ -30,7 +30,7 @@ runs:
       run: pnpm install --frozen-lockfile
     - name: Cache turbo
       if: inputs.cache-key != 'false'
-      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: ./.turbo/cache
         key: turbo2-cache-${{ runner.os }}-${{ inputs.cache-key }}-${{ github.sha }}
